@@ -6,15 +6,21 @@ var htmlA;
 var cssA;
 var finalTags = [];
 var readableHtml;
+var cssBlocks = [];
+var globalDelay = 30;
+
+$(document).ready(function(){
+  start();
+});
 
 var Tag = function(content, innerTags){
   this.content = content;
   this.innerTags = innerTags || new Array();
 }
 
-var CssRule = function(selector, declaration) {
+var CssBlock = function(selector, declarationArray) {
   this.selector = selector;
-  this.declaration = declaration || new Declaration();
+  this.declarations = declarationArray || new Array();
 }
 
 var Declaration = function(property, val) {
@@ -26,6 +32,7 @@ var Declaration = function(property, val) {
 function start() {
   htmlA = html.split('');
   cssLines = css.split('}');
+  cssLines.splice(cssLines.length-1, 1);
   cssA = css.split('');
   readableHtml = html.split('><');
   readableHtml.forEach(function(l, i){
@@ -43,37 +50,7 @@ function start() {
   cssLines.forEach(function(l, i){
     cssLines[i] += '}';
   });
-  // var stack = [];
-  // var content = '';
-  // var ending = false;
-  // htmlA.forEach(function(c, i){
-  //   content += c;
-  //   if(c == '>'){
-  //     // console.log(stack);
-  //     if(ending) {
-  //       ending = false;
-  //       // console.log(content);
-  //       var tmpTag = stack.pop();
-  //       var newContent = tmpTag.content + content;
-  //       tmpTag.content = newContent;
-  //       if(stack.length > 0) {
-  //         stack[stack.length - 1].innerTags.push(tmpTag);
-  //       }
-  //       else {
-  //         tmpTag.content = newContent;
-  //         finalTags.push(tmpTag);
-  //       }
-  //     }
-  //     else {
-  //       stack.push(new Tag(content));
-  //     }
-  //     content = '';
-  //   }
-  //   if(c + htmlA[i+1] == '</') {
-  //     ending = true;
-  //   }
-  // });
-  console.log(finalTags);
+  generateCssBlocks();
   document.getElementsByClassName('html-line')[0].insertAdjacentHTML('afterend', '<strong class="cursor">|</strong>')
   writeCode(0);
   injectHtml(0);
@@ -89,7 +66,7 @@ function writeCode(index){
   counter++;
   setTimeout(function(){
     writeCode(index);
-  }, 20);  
+  }, globalDelay);  
 }
 
 function injectHtml(index) {
@@ -99,7 +76,7 @@ function injectHtml(index) {
   index++;
   setTimeout(function(){
     injectHtml(index);
-  }, 50);
+  }, globalDelay);
 }
 
 function typeCallback(index) {
@@ -138,6 +115,70 @@ function readyIDE() {
   });
 }
 
-function writeCss() {
+function generateCssBlocks() {
+  cssLines.forEach(function(l, i){
+    var selector = l.split('{')[0];
+    selector = selector.replace(/ /g,'');
+    var rest = l.split('{')[1].replace('}', '');
+    rest = rest.split(';');
+    rest.splice(rest.length-1, 1);
+    declarationArray = [];
+    rest.forEach(function(d, i){
+      declarationArray.push(new Declaration(d.split(':')[0], d.split(':')[1]));
+    });
+    cssBlocks.push(new CssBlock(selector, declarationArray));
+  });
+}
 
+function writeCss() {
+  document.getElementById('typingHtml').insertAdjacentHTML('beforeend', '')
+}
+
+var letterCount = 0;
+var mode = 'selector';
+var letters = '';
+var currentSelector = '';
+var currentProperty = '';
+var currentVal = '';
+var declarationCount = 0;
+var blockCount = 0;
+function injectCss() {
+  if(blockCount >= cssBlocks.length) {
+    return;
+  }
+  if(mode == 'selector') {
+    currentSelector += cssBlocks[blockCount].selector[letterCount];
+    letterCount++;
+    if(letterCount >= cssBlocks[blockCount].selector.length) {
+      mode = 'property';
+      letterCount = 0;
+    }
+  }
+  else if(mode == 'property') {
+    currentProperty += cssBlocks[blockCount].declarations[declarationCount].property[letterCount];
+    letterCount++;
+    if(letterCount >= cssBlocks[blockCount].declarations[declarationCount].property.length) {
+      mode = 'val';
+      letterCount = 0;
+    }
+  }
+  else if(mode == 'val') {
+    currentVal += cssBlocks[blockCount].declarations[declarationCount].val[letterCount];
+    letterCount++;
+    if(letterCount >= cssBlocks[blockCount].declarations[declarationCount].val.length) {
+      $(currentSelector).css(currentProperty, currentVal);
+      console.log("$('" + currentSelector + "').css(" + currentProperty + ", " + currentVal + ");");
+      mode = 'property';
+      letterCount = 0;
+      declarationCount++;
+      if(declarationCount >= cssBlocks[blockCount].declarations.length) {
+        blockCount++;
+        declarationCount = 0;
+        mode = 'selector';
+        currentSelector = '';
+        letterCount = 0;
+      }
+    }
+  }
+  injectCss();
 }
