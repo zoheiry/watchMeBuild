@@ -1,5 +1,5 @@
-var html = '<div class="profile-card"><div class="cover-photo"></div><div class="profile-pic"></div><h2>Ali El Zoheiry</h2><p>Lorem ipsum dolor sit amet</p><p><span>Co founder @ </span><a href="#">Takeoff Apps</a></p></div><div class="sibling"></div>';
-var css = 'body {  background-image: url(stream-cloud.jpg);  background-repeat: no-repeat;  background-size: cover;  margin: 0;  padding: 0;}.profile-card {  width: 320px;  height: 410px;  background-color: #FFF;  margin-left: auto;  margin-right: auto;  margin-top: 110px;  border-radius: 10px;  box-shadow: 0px 0px 12px 0px #000;}.cover-photo {  width: 100%;  height: 100px;  background-image: url(cover-photo.png);  background-size: cover;  background-position: 50% 50%;}.profile-pic {  background-image: url(self2.jpg);  background-size: cover;  background-repeat: no-repeat;  width: 110px;  height: 110px;  border-radius: 100px;  margin-left: auto;  margin-right: auto;  margin-top: -50px;  border: solid 5px white;}h2 {  text-align: center;  margin: 0;}p {  text-align: center;  margin-top: 5px;  margin-bottom: 5px;}a {  color: #000;  text-decoration: underline;  font-weight: bold;}'
+var html = '<div class="profile-box"><div class="cover-photo"></div><div class="profile-pic"></div><h2><strong>Ali El Zoheiry</strong></h2><p>Lorem ipsum dolor sit amet.</p><p>Front-End Guru.</p><p>Co-founder @ <a href="#"><strong>Takeoff Apps</strong></a></p><ul><li><a href="#"><i class="fa fa-facebook-square"></i></a></li><li><a href="#"><i class="fa fa-twitter-square"></i></a></li><li><a href="#"><i class="fa fa-github-square"></i></a></li><li><a href="#"><i class="fa fa-instagram"></i></a></li><li><a href="#"><i class="fa fa-flickr"></i></a></li></ul><p class="extra-margin">+20(11)443351050</p><p class="extra-margin">ali@takeoffapps.com</p></div>';
+var css = 'body { margin: 0;  padding: 0; background-image: url("stream-cloud.jpg");  background-repeat: no-repeat; background-size: cover; font-family: "raleway"}.profile-box { width: 320px; height: 410px;  background-color: #FFF; border-radius: 10px;  margin-left: auto;  margin-right: auto; margin-top: 50px; box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.5);}.cover-photo { width: 100%;  height: 140px;  background-image: url("cover-photo.jpg"); background-size: cover; border-radius: 10px;  border-bottom-left-radius: 0; border-bottom-right-radius: 0;  background-position: 50% 50%; background-repeat: no-repeat;}.profile-pic {  background-image: url("self2.jpg"); background-size: cover; background-repeat: no-repeat; width: 110px; height: 110px;  margin-left: auto;  margin-right: auto; border-radius: 50%; margin-top: -60px;  border: solid 5px #FFF;}h2 {  text-align: center; margin-top: 5px;  margin-bottom: 5px; color: rgba(0, 0, 0, 0.7);}strong { font-weight: bold;}p {  font-weight: 300; padding-left: 15px; padding-right: 15px;  text-align: center; margin-top: 5px;  margin-bottom: 0; font-size: 14px;  color: rgba(0, 0, 0, 0.9);}p a {  color: #000;}ul { padding: 0; margin: 0;  list-style: none; text-align: center; margin-top: 10px;}ul li { display: inline-block;  margin-right: 10px;}ul li:last-child {  margin-right: 0;}ul li a {  color: rgba(0, 0, 0, 0.7);  text-decoration: none;  display: inline;  font-size: 28px;}ul li a:hover {  color: #000;}.extra-margin {  margin-top: 10px;}';
 var cssLines;
 var htmlLines;
 var htmlA;
@@ -7,7 +7,7 @@ var cssA;
 var finalTags = [];
 var readableHtml;
 var cssBlocks = [];
-var globalDelay = 40;
+var globalDelay = 80;
 var cssArea;
 
 $(document).ready(function(){
@@ -76,7 +76,6 @@ function injectHtml(index) {
     cssArea = document.getElementById('typingCss');
     document.getElementById('typingHtml').style.fontSize = '10px';
     document.getElementById('typingCss').style.fontSize = '14px';
-    globalDelay = 80;
     injectCss();
     return;
   }
@@ -134,7 +133,8 @@ function readyIDE() {
 function generateCssBlocks() {
   cssLines.forEach(function(l, i){
     var selector = l.split('{')[0];
-    selector = selector.replace(/ /g,'');
+    selector = selector.trim();
+    console.log(i);
     var rest = l.split('{')[1].replace('}', '');
     rest = rest.split(';');
     rest.splice(rest.length-1, 1);
@@ -181,6 +181,7 @@ function injectCss() {
 
     if(letterCount >= cssBlocks[blockCount].selector.length) {
       injectSelector = true;
+      document.getElementById('selector-' + selectorCount).insertAdjacentHTML('beforeend', ' {');
       selectorCount++;
       mode = 'property';
       letterCount = 0;
@@ -223,6 +224,8 @@ function injectCss() {
       letterCount = 0;
       declarationCount++;
       if(declarationCount >= cssBlocks[blockCount].declarations.length) {
+        console.log('count = ' + valCount);
+        cssArea.insertAdjacentHTML('beforeend', '<span class="selector">}</span>');
         blockCount++;
         declarationCount = 0;
         mode = 'selector';
