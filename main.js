@@ -7,7 +7,8 @@ var cssA;
 var finalTags = [];
 var readableHtml;
 var cssBlocks = [];
-var globalDelay = 20;
+var globalDelay = 40;
+var cssArea;
 
 $(document).ready(function(){
   start();
@@ -46,11 +47,11 @@ function start() {
       readableHtml[i] = '<' + readableHtml[i] + '>';
     }
   });
-  readyIDE();
   cssLines.forEach(function(l, i){
     cssLines[i] += '}';
   });
   generateCssBlocks();
+  readyIDE();
   document.getElementsByClassName('html-line')[0].insertAdjacentHTML('afterend', '<strong class="cursor">|</strong>')
   writeCode(0);
   injectHtml(0);
@@ -70,8 +71,15 @@ function writeCode(index){
 }
 
 function injectHtml(index) {
-  if(index == html.length)
+  if(index == html.length){
+    document.getElementById('typingHtml').insertAdjacentHTML('beforeend', '<div id="typingCss"></div>');
+    cssArea = document.getElementById('typingCss');
+    document.getElementById('typingHtml').style.fontSize = '10px';
+    document.getElementById('typingCss').style.fontSize = '14px';
+    globalDelay = 80;
+    injectCss();
     return;
+  }
   $(".container").html(html.substring(0, index));
   index++;
   setTimeout(function(){
@@ -113,6 +121,14 @@ function readyIDE() {
     }
     document.getElementById('typingHtml').insertAdjacentHTML('beforeend', '<br>');
   });
+  // cssBlocks.forEach(function(b, i){
+  //   var cssArea = document.getElementById('typingCss');
+  //   cssArea.insertAdjacentHTML('beforeend', '<span class="css-line level-0"></span>');
+  //   b.declarations.forEach(function(d, i){
+  //     cssArea.insertAdjacentHTML('beforeend', '<span class="css-line level-1"></span>');
+  //   });
+  //   cssArea.insertAdjacentHTML('beforeend', '<span class="css-line level-0"></span>');
+  // });
 }
 
 function generateCssBlocks() {
@@ -142,32 +158,65 @@ var currentProperty = '';
 var currentVal = '';
 var declarationCount = 0;
 var blockCount = 0;
+var injectSelector = true;
+var injectProperty = true;
+var injectVal = true;
+var selectorCount = 0;
+var propertyCount = 0;
+var valCount = 0;
+var htmlArea = document.getElementById('typingHtml');
 function injectCss() {
   if(blockCount >= cssBlocks.length) {
     return;
   }
+  $(htmlArea).scrollTop(htmlArea.scrollHeight);
   if(mode == 'selector') {
+    if(injectSelector){
+      injectSelector = false;
+      cssArea.insertAdjacentHTML('beforeend', '<div class="css-line level-0 selector" id="selector-' + selectorCount + '"></div>');
+    }
     currentSelector += cssBlocks[blockCount].selector[letterCount];
+    document.getElementById('selector-' + selectorCount).insertAdjacentHTML('beforeend', cssBlocks[blockCount].selector[letterCount]);
     letterCount++;
+
     if(letterCount >= cssBlocks[blockCount].selector.length) {
+      injectSelector = true;
+      selectorCount++;
       mode = 'property';
       letterCount = 0;
     }
   }
   else if(mode == 'property') {
+    if(injectProperty){
+      injectProperty = false;
+      cssArea.insertAdjacentHTML('beforeend', '<span class="css-line level-1 property" id="property-' + propertyCount + '"></span>');
+    }
     currentProperty += cssBlocks[blockCount].declarations[declarationCount].property[letterCount];
+    document.getElementById('property-' + propertyCount).insertAdjacentHTML('beforeend', cssBlocks[blockCount].declarations[declarationCount].property[letterCount]);
     letterCount++;
     if(letterCount >= cssBlocks[blockCount].declarations[declarationCount].property.length) {
+      injectProperty = true;
+      document.getElementById('property-' + propertyCount).insertAdjacentHTML('beforeend', ': ');
+      propertyCount++;
       mode = 'val';
       letterCount = 0;
     }
   }
   else if(mode == 'val') {
+    if(injectVal){
+      injectVal = false;
+      cssArea.insertAdjacentHTML('beforeend', '<span class="css-line val" id="val-' + valCount + '"></span>');
+    }
     currentVal += cssBlocks[blockCount].declarations[declarationCount].val[letterCount];
+    document.getElementById('val-' + valCount).insertAdjacentHTML('beforeend', cssBlocks[blockCount].declarations[declarationCount].val[letterCount]);
     letterCount++;
     if(letterCount >= cssBlocks[blockCount].declarations[declarationCount].val.length) {
       $(currentSelector.trim()).css(currentProperty.trim(), currentVal.trim());
       console.log("$('" + currentSelector.trim() + "').css(" + currentProperty.trim() + ", " + currentVal.trim() + ");");
+      injectVal = true;
+      document.getElementById('val-' + valCount).insertAdjacentHTML('beforeend', ';');
+      document.getElementById('val-' + valCount).insertAdjacentHTML('beforeend', '<br>');
+      valCount++;
       mode = 'property';
       currentProperty = '';
       currentVal = '';
