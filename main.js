@@ -7,7 +7,7 @@ var cssA;
 var finalTags = [];
 var readableHtml;
 var cssBlocks = [];
-var globalDelay = 30;
+var globalDelay = 20;
 
 $(document).ready(function(){
   start();
@@ -166,9 +166,11 @@ function injectCss() {
     currentVal += cssBlocks[blockCount].declarations[declarationCount].val[letterCount];
     letterCount++;
     if(letterCount >= cssBlocks[blockCount].declarations[declarationCount].val.length) {
-      $(currentSelector).css(currentProperty, currentVal);
-      console.log("$('" + currentSelector + "').css(" + currentProperty + ", " + currentVal + ");");
+      $(currentSelector.trim()).css(currentProperty.trim(), currentVal.trim());
+      console.log("$('" + currentSelector.trim() + "').css(" + currentProperty.trim() + ", " + currentVal.trim() + ");");
       mode = 'property';
+      currentProperty = '';
+      currentVal = '';
       letterCount = 0;
       declarationCount++;
       if(declarationCount >= cssBlocks[blockCount].declarations.length) {
@@ -176,9 +178,12 @@ function injectCss() {
         declarationCount = 0;
         mode = 'selector';
         currentSelector = '';
+        currentVal = '';
         letterCount = 0;
       }
     }
   }
-  injectCss();
+  setTimeout(function(){
+    injectCss();
+  }, globalDelay);
 }
