@@ -7,11 +7,15 @@ var cssA;
 var finalTags = [];
 var readableHtml;
 var cssBlocks = [];
-var globalDelay = 80;
+var globalDelay = 50;
 var cssArea;
 
 $(document).ready(function(){
   start();
+});
+
+document.getElementById('write-speed-slider').addEventListener('change', function(){
+  globalDelay = parseInt(this.value);
 });
 
 var Tag = function(content, innerTags){
@@ -76,6 +80,7 @@ function injectHtml(index) {
     cssArea = document.getElementById('typingCss');
     document.getElementById('typingHtml').style.fontSize = '10px';
     document.getElementById('typingCss').style.fontSize = '14px';
+    // globalDelay = 1;
     injectCss();
     return;
   }

@@ -67,3 +67,10 @@
 .val {
   color: #9e86c8;
 }
+
+#write-speed-slider {
+  width: 300px;
+  position: fixed;
+  top: 0;
+  right: 22px;
+}
