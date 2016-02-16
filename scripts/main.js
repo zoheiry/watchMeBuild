@@ -155,7 +155,13 @@ function generateCssBlocks() {
     rest.splice(rest.length-1, 1);
     declarationArray = [];
     rest.forEach(function(d, i){
-      declarationArray.push(new Declaration(d.split(':')[0], d.split(':')[1]));
+      var chunks = d.split(':');
+      var c1 = chunks[0];
+      var c2 = chunks[1]
+      if(chunks[2]) {
+        c2 += ':' + chunks[2];
+      }
+      declarationArray.push(new Declaration(c1, c2));
     });
     cssBlocks.push(new CssBlock(selector, declarationArray));
   });
