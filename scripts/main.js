@@ -12,12 +12,12 @@ var cssArea;
 var firstScriptRun = true;
 
 $(document).ready(function(){
-  $("#write-speed-slider").val(globalDelay);
+  $("#write-speed-slider").val(100 - globalDelay);
   start();
 });
 
 document.getElementById('write-speed-slider').addEventListener('change', function(){
-  globalDelay = parseInt(this.value);
+  globalDelay = 100 - parseInt(this.value);
 });
 
 var Tag = function(content, innerTags){
