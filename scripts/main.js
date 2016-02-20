@@ -88,7 +88,7 @@ function injectHtml(index) {
   if(index == html.length){
     document.getElementById('typingHtml').insertAdjacentHTML('beforeend', '<div id="typingCss"></div>');
     cssArea = document.getElementById('typingCss');
-    document.getElementById('typingHtml').style.fontSize = '10px';
+    // document.getElementById('typingHtml').style.fontSize = '10px';
     document.getElementById('typingCss').style.fontSize = '14px';
     // globalDelay = 1;
     injectCss();
@@ -270,3 +270,11 @@ function injectCss() {
     injectCss();
   }, globalDelay);
 }
+
+$(document).on('click', '#typingMinimizeIcon', function(){
+  $("#typingArea").hide();
+});
+
+$(document).on('click', '#typingMaximizeIcon', function(){
+  $("#typingArea").show();
+});
