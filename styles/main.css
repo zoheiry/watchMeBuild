@@ -2,6 +2,11 @@ body {
   font-family: "raleway";
 }
 
+body, html {
+  margin: 0;
+  padding: 0;
+}
+
 .level-1 {
   margin-left: 15px;
 }
@@ -54,11 +59,23 @@ body {
   margin-top: 10px;
 }
 
+#typingArea {
+  position: absolute;
+  right: 0;
+  z-index: 999999999;
+  height: 100%;
+  top: 0;
+}
+
+
 #typingHtml {
   overflow: auto;
-  height: 500px;
-  position: relative;
-  z-index: 9999999;
+  height: calc(100% - 75px);
+  background:#2e2e2e;
+  padding: 20px;
+  padding-top: 0;
+  width: 300px;
+  color: #e5b567;
 }
 
 #typingHtml::-webkit-scrollbar {
@@ -89,8 +106,38 @@ body {
 }
 
 #write-speed-slider {
+  width: 100%;
+}
+
+.typing-area-controls {
   width: 300px;
-  position: fixed;
-  top: 0;
+  /*background: #1e1e1e;*/
+  background-color: #4A4842;
+  padding: 20px;
+  padding-bottom: 2px;
+  padding-top: 2px;
+  color: #FFF;
+  text-align: center;
+}
+
+.typing-area-controls .typing-speed {
+  font-size: 14px;
+  text-decoration: underline;
+  margin-top: 8px;
+}
+
+.typing-area-controls .typing-speed::before {
+  content: "0";
+  position: absolute;
+  left: 22px;
+  top: 7px;
+  font-size: 14px;
+}
+
+.typing-area-controls .typing-speed::after {
+  content: "100";
+  position: absolute;
   right: 22px;
+  top: 7px;
+  font-size: 14px;
 }

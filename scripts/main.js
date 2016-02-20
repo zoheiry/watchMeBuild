@@ -63,6 +63,7 @@ function start() {
   injectHtml(0);
 }
 
+var firstHtmlLine = true;
 var counter = 0;
 function writeHtml(index){
   if(counter == readableHtml[index].length) {
@@ -71,8 +72,12 @@ function writeHtml(index){
   }
   document.getElementsByClassName('html-line')[index].insertAdjacentHTML('beforeend', readableHtml[index][counter]);
   // start scrolling after 20 lines
-  if(index > 20)
-    $(htmlArea).scrollTop(htmlArea.scrollHeight);
+  if(index > 20){
+    if(firstHtmlLine || $("#typingHtml")[0].scrollHeight - $("#typingHtml").scrollTop() - $("#typingHtml").height() <= 50){
+      firstHtmlLine = false;
+      $(htmlArea).scrollTop(htmlArea.scrollHeight);
+    }
+  }
   counter++;
   setTimeout(function(){
     writeHtml(index);
@@ -186,11 +191,16 @@ var selectorCount = 0;
 var propertyCount = 0;
 var valCount = 0;
 var htmlArea = document.getElementById('typingHtml');
+var firstCssLine = true;
 function injectCss() {
   if(blockCount >= cssBlocks.length) {
     return;
   }
-  $(htmlArea).scrollTop(htmlArea.scrollHeight);
+  // console.log($("#typingHtml")[0].scrollHeight - $("#typingHtml").scrollTop() - $("#typingHtml").height());
+  if(firstCssLine || $("#typingHtml")[0].scrollHeight - $("#typingHtml").scrollTop() - $("#typingHtml").height() <= 50){
+    firstCssLine = false;
+    $(htmlArea).scrollTop(htmlArea.scrollHeight);
+  }
   if(mode == 'selector') {
     if(injectSelector){
       injectSelector = false;
