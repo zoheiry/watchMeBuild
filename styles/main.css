@@ -155,4 +155,7 @@ body, html {
   text-align: center;
   line-height: 23px;
   z-index: 99999999;
+  transition: 0.5s ease;
+  -webkit-transition: 0.5s ease;
+  -moz-transition: 0.5s ease;
 }

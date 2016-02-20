@@ -194,6 +194,10 @@ var htmlArea = document.getElementById('typingHtml');
 var firstCssLine = true;
 function injectCss() {
   if(blockCount >= cssBlocks.length) {
+    //finished injecting css
+    setTimeout(function(){
+    $("#typingArea").slideUp();
+    }, 1000);
     return;
   }
   // console.log($("#typingHtml")[0].scrollHeight - $("#typingHtml").scrollTop() - $("#typingHtml").height());
@@ -272,9 +276,9 @@ function injectCss() {
 }
 
 $(document).on('click', '#typingMinimizeIcon', function(){
-  $("#typingArea").hide();
+  $("#typingArea").slideUp();
 });
 
 $(document).on('click', '#typingMaximizeIcon', function(){
-  $("#typingArea").show();
+  $("#typingArea").slideDown();
 });
