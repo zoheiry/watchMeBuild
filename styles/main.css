@@ -79,6 +79,7 @@ body, html {
 
 #typingHtml::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
  
 #typingHtml::-webkit-scrollbar-thumb {
