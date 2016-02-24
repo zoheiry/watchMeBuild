@@ -61,7 +61,6 @@
     });
     generateCssBlocks();
     readyIDE();
-    document.getElementsByClassName('html-line')[0].insertAdjacentHTML('afterend', '<strong class="cursor">|</strong>')
     writeHtml(0);
     injectHtml(0);
   }
@@ -114,8 +113,6 @@
     if(index >= readableHtml.length) {
       return;
     }
-    document.getElementsByClassName('cursor')[0].parentNode.removeChild(document.getElementsByClassName('cursor')[0]);
-    document.getElementsByClassName('html-line')[index].insertAdjacentHTML('afterend', '<strong class="cursor">|</strong>')
     writeHtml(index);
   }
 
