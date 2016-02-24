@@ -80,6 +80,7 @@ body, html {
   padding: 20px;
   width: 300px;
   color: #e5b567;
+  font-size: 14px;
 }
 
 #typingHtml::-webkit-scrollbar {
