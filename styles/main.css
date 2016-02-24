@@ -8,23 +8,28 @@ body, html {
 }
 
 .level-1 {
-  margin-left: 15px;
+  left: 15px;
+  position: relative;
 }
 
 .level-2 {
-  margin-left: 30px;
+  left: 30px;
+  position: relative;
 }
 
 .level-3 {
-  margin-left: 45px;
+  left: 45px;
+  position: relative;
 }
 
 .level-4 {
-  margin-left: 60px;
+  left: 60px;
+  position: relative;
 }
 
 .level-5 {
-  margin-left: 75px;
+  left: 75px;
+  position: relative;
 }
 
 .cursor {
