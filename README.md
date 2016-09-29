@@ -10,7 +10,7 @@ You can use your own HTML and CSS code but with a few restrictions.
 
 **1-** Put your html in `var html;` and your css in `var css;` in lines 1 & 2 in `main.js`
 
-**2-** Your HTML code must only contain strings inside "" double quotes and note '' single quotes.
+**2-** Your HTML code must only contain strings inside " " double quotes and not ' ' single quotes.
 
 **3-** Your CSS cannot have any nested elements such as media queries or Sass/Less code.
 
