@@ -1,6 +1,6 @@
 # watchMeBuild
 
-## [DEMO](http://alizoh.herokuapp.com)
+## [DEMO](https://watch-me-build.alizoh.com)
 
 This is a simple javascript tool that given any CSS and HTML code, it injects it in the DOM letter by letter and let's you watch your website build itself.
 Just open the index.html file and view the Demo.
